@@ -1,0 +1,57 @@
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+#define relay 8
+#define rf 2
+#define buzzer 9  
+void setup() 
+{
+   lcd.init();
+   lcd.backlight();
+   Serial.begin(9600);
+  
+   pinMode(relay, OUTPUT);
+   pinMode(rf, INPUT);
+   pinMode(buzzer, OUTPUT); 
+   
+   delay(1000);    
+   digitalWrite(relay, HIGH); 
+   digitalWrite(buzzer, LOW);
+   delay(1000); 
+   
+   lcd.setCursor(0, 0);
+   lcd.print(" SPEED CONTROL ");
+   lcd.setCursor(0, 1);
+   lcd.print("SCHOOL ZONE");
+   delay(2000); 
+   lcd.clear();
+}
+
+void loop()
+{
+  if (digitalRead(rf) == LOW)  // School zone detected
+  {
+    lcd.setCursor(0, 0);
+    lcd.print(" SCHOOL ZONE ");
+    lcd.setCursor(0, 1);
+    lcd.print(" LOW SPEED ");
+    
+    digitalWrite(relay, LOW); 
+    digitalWrite(buzzer, HIGH);  
+    
+    delay(1000);    
+    lcd.clear();
+  }
+  else  
+  {
+    lcd.setCursor(0, 0);
+    lcd.print("  NORMAL ZONE ");
+    lcd.setCursor(0, 1);
+    lcd.print("  HIGH SPEED ");
+    
+    digitalWrite(relay, HIGH);  
+    digitalWrite(buzzer, LOW);   
+    
+    delay(2000);  
+    lcd.clear();
+  }
+}
